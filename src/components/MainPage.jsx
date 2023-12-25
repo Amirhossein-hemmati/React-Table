@@ -14,7 +14,8 @@ function MainPage() {
   const [pageSize, setPageSize] = useState(10); // number of data in each page
   const [totalPages, setTotalPage] = useState(0);
   const [searchBox, setSearchBox] = useState(""); // create for search
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [updateColumns, setUpdateColumns] = useState([]); // update each item that drag and drop to the new place
 
   useEffect(() => {
     setIsLoading(true);
@@ -27,6 +28,7 @@ function MainPage() {
       })
       .then((response) => {
         setData(response.data);
+        setUpdateColumns(Object.keys(response.data[0] || {}))
         const totalCount = response.headers["x-total-count"];
         setTotalPage(Math.ceil(totalCount / +pageSize));
       })
@@ -39,7 +41,13 @@ function MainPage() {
   }
 
   const headers = Object.keys(data[0] ?? {});
-  console.log(headers);
+
+  const headersWithIds = headers.map((header, index) => ({
+    id: String(index + 1),
+    name: header,
+  }));
+
+  console.log(updateColumns);
 
   return (
     <div className="w-[95%] h-auto flex justify-around items-start flex-col">
@@ -48,8 +56,12 @@ function MainPage() {
         pageSize={pageSize}
         setPageSize={setPageSize}
         setCurrentPage={setCurrentPage}
-        searchBox={searchBox}
         setSearchBox={setSearchBox}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        setUpdateColumns={setUpdateColumns}
+        headers={headersWithIds}
+        updateColumns={updateColumns}
       />
       <div className="w-full h-auto rounded-[10px] flex justify-start items-center flex-col">
         <table className="w-full mt-[20px]">

@@ -5,15 +5,21 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
+import DragAndDropModal from "./DragAndDropModal";
+
 function Navbar({
   data,
   pageSize,
   setPageSize,
   setCurrentPage,
-  searchBox,
-  setSearchBox
+  setSearchBox,
+  setIsOpen,
+  setUpdateColumns,
+  isOpen,
+  headers,updateColumns
 }) {
   const [changeInput, setChangeInput] = useState("")
+
   
   useEffect(() => {
     setSearchBox(""); // Clear the search box when data changes
@@ -30,6 +36,8 @@ function Navbar({
     setSearchBox(lowerCase); 
   
   }
+
+  
 
   return (
     <div className="w-full mt-[20px]">
@@ -72,9 +80,10 @@ function Navbar({
               <option value={40}>40</option>
             </select>
           </div>
-          <button className="w-[40px] h-[44px] border-[1px] rounded-md flex justify-center items-center mr-[12px]">
+          <button onClick={() => setIsOpen(true)} className="w-[40px] h-[44px] border-[1px] rounded-md flex justify-center items-center mr-[12px]">
             <Bars3BottomLeftIcon className="w-5 h-5 text-gray-500" />
           </button>
+          {isOpen && <DragAndDropModal updateColumns={updateColumns} setIsOpen={setIsOpen} headers={headers} setUpdateColumns={setUpdateColumns}/>}
         </div>
       </div>
     </div>
