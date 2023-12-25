@@ -1,3 +1,3 @@
 export function generateUniqueId() {
-    return Date.now().toString() + Math.random().toString();
-   }
+  return Date.now().toString() + Math.random().toString();
+}

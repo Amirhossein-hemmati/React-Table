@@ -17,6 +17,13 @@ function MainPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [updateColumns, setUpdateColumns] = useState([]); // update each item that drag and drop to the new place
 
+  // array of string column order
+  const [columnOrder, setColumnOrder] = useState([]);
+
+  useEffect(() => {
+    console.log(columnOrder)
+  }, [columnOrder]);
+
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -28,7 +35,7 @@ function MainPage() {
       })
       .then((response) => {
         setData(response.data);
-        setUpdateColumns(Object.keys(response.data[0] || {}))
+        setColumnOrder(Object.keys(response.data[0] || {}));
         const totalCount = response.headers["x-total-count"];
         setTotalPage(Math.ceil(totalCount / +pageSize));
       })
@@ -52,6 +59,8 @@ function MainPage() {
   return (
     <div className="w-[95%] h-auto flex justify-around items-start flex-col">
       <Navbar
+        setColumnOrder={setColumnOrder}
+        columnOrder={columnOrder}
         data={data}
         pageSize={pageSize}
         setPageSize={setPageSize}
@@ -60,7 +69,7 @@ function MainPage() {
         setIsOpen={setIsOpen}
         isOpen={isOpen}
         setUpdateColumns={setUpdateColumns}
-        headers={headersWithIds}
+        headers={headers}
         updateColumns={updateColumns}
       />
       <div className="w-full h-auto rounded-[10px] flex justify-start items-center flex-col">

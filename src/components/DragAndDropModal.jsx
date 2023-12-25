@@ -7,19 +7,44 @@ import {
 import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-function DragAndDropModal({ setIsOpen, headers, setUpdateColumns ,updateColumns}) {
-  const [test, setTest] = useState(...(headers || []));
+function DragAndDropModal({
+  setIsOpen,
+  headers,
+  setUpdateColumns,
+  columnOrder,
+}) {
+  const [test, setTest] = useState([]);
 
+  // prevent nullish of state
+  useEffect(() => {
+    if (test.length === 0) {
+      const headersWithIds = headers.map((header, index) => ({
+        id: String(index + 1),
+        name: header,
+        isActive: false,
+      }));
 
+      setTest(headersWithIds);
+    }
+  }, []);
 
-  console.log("re-render");
+  useEffect(() => {
+    console.log(test);
+    // set state in parent
+  }, [test]);
 
   const handleOnDragEnd = (result) => {
-    const items = Array.from(headers);
+    const items = Array.from(test);
+
     const [reorderedItem] = items.splice(result.source.index, 1);
+
     items.splice(result.destination.index, 0, reorderedItem);
 
-    setUpdateColumns(items);
+    setTest(items);
+  };
+
+  const handleToggleColumnAcitivity = () => {
+    // toggle here
   };
 
   return (
@@ -43,7 +68,7 @@ function DragAndDropModal({ setIsOpen, headers, setUpdateColumns ,updateColumns}
                 ref={provided.innerRef}
                 className="columnName"
               >
-                {headers.map((item, index) => {
+                {test.map((item, index) => {
                   return (
                     <Draggable
                       key={item.id}
