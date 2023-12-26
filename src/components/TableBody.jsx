@@ -1,28 +1,31 @@
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function TableBody({ searchBox, data }) {
+function TableBody({ searchBox, data, columnOrder, setData }) {
+  const [sortedData, setSortedData] = useState(data);
 
   const handleRowClick = (id) => {
     navigate(`/dynamic-table/${id}`);
   };
 
   const navigate = useNavigate();
-  const filteredData = data.filter((el) => {
-    //if no input the return the original
-    if (searchBox === '') {
-        return el;
-    }
-    //return the item which contains the user input
-    else {
-        return el.title.toLowerCase().includes(searchBox)
-    }
+  
+
+const filteredData = data.filter((el) => {
+  //if no input the return the original
+  if (searchBox === '') {
+      return el;
+  }
+  //return the item which contains the user input
+  else {
+      return el.title.toLowerCase().includes(searchBox)
+  }
 })
-  
 
-  //handle changing of each page
-  
 
+
+  
   return (
     <>
       {filteredData.map((item, index) => {
@@ -54,7 +57,7 @@ function TableBody({ searchBox, data }) {
             >
               {truncatedBody}
             </td>
-            <td className=" py-[60px] flex justify-center items-center">
+            <td className=" py-[32px] flex justify-center items-center">
               <PencilSquareIcon
                 onClick={(event) => {
                   event.stopPropagation();

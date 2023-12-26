@@ -15,14 +15,12 @@ function MainPage() {
   const [totalPages, setTotalPage] = useState(0);
   const [searchBox, setSearchBox] = useState(""); // create for search
   const [isOpen, setIsOpen] = useState(false);
-  const [updateColumns, setUpdateColumns] = useState([]); // update each item that drag and drop to the new place
-
   // array of string column order
   const [columnOrder, setColumnOrder] = useState([]);
 
-  useEffect(() => {
-    console.log(columnOrder)
-  }, [columnOrder]);
+  // useEffect(() => {
+  //   console.log(columnOrder)
+  // }, [columnOrder]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -35,7 +33,6 @@ function MainPage() {
       })
       .then((response) => {
         setData(response.data);
-        setColumnOrder(Object.keys(response.data[0] || {}));
         const totalCount = response.headers["x-total-count"];
         setTotalPage(Math.ceil(totalCount / +pageSize));
       })
@@ -49,18 +46,15 @@ function MainPage() {
 
   const headers = Object.keys(data[0] ?? {});
 
-  const headersWithIds = headers.map((header, index) => ({
-    id: String(index + 1),
-    name: header,
-  }));
+  const handleToggleColumnAcitivity = (test) => {
+    setColumnOrder(test)
+  };
+  console.log(columnOrder)
 
-  console.log(updateColumns);
 
   return (
     <div className="w-[95%] h-auto flex justify-around items-start flex-col">
       <Navbar
-        setColumnOrder={setColumnOrder}
-        columnOrder={columnOrder}
         data={data}
         pageSize={pageSize}
         setPageSize={setPageSize}
@@ -68,15 +62,14 @@ function MainPage() {
         setSearchBox={setSearchBox}
         setIsOpen={setIsOpen}
         isOpen={isOpen}
-        setUpdateColumns={setUpdateColumns}
         headers={headers}
-        updateColumns={updateColumns}
+        handleToggle={handleToggleColumnAcitivity}
       />
       <div className="w-full h-auto rounded-[10px] flex justify-start items-center flex-col">
         <table className="w-full mt-[20px]">
-          <TableHead headers={headers} />
+          <TableHead columnOrder={columnOrder} headers={headers}/>
           <tbody>
-            <TableBody searchBox={searchBox} data={data} />
+            <TableBody searchBox={searchBox} data={data} setData={setData} columnOrder={columnOrder}/>
           </tbody>
         </table>
         <Tooltip id="my-tooltip" float={true} />

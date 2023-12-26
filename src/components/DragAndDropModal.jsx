@@ -10,8 +10,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 function DragAndDropModal({
   setIsOpen,
   headers,
-  setUpdateColumns,
-  columnOrder,
+  handleToggle
 }) {
   const [test, setTest] = useState([]);
 
@@ -29,8 +28,7 @@ function DragAndDropModal({
   }, []);
 
   useEffect(() => {
-    console.log(test);
-    // set state in parent
+    handleToggle(test)
   }, [test]);
 
   const handleOnDragEnd = (result) => {
@@ -43,17 +41,13 @@ function DragAndDropModal({
     setTest(items);
   };
 
-  const handleToggleColumnAcitivity = () => {
-    // toggle here
-  };
-
   return (
-    <div>
+    <div className="flex justify-center items-center bg-red-300">
       <div
         onClick={() => setIsOpen(false)}
-        className="w-[100vw] h-[100vh] inset-0 fixed bg-gray-400 opacity-20 "
+        className="w-[100vw] h-[100vh] inset-0 fixed bg-gray-400 opacity-10"
       ></div>
-      <div className="w-[28%] min-h-[400px] absolute top-[120px] left-[500px] bg-white rounded-md">
+      <div className="w-[400px] min-h-[400px] absolute bg-white rounded-md top-[200px]">
         <div className="w-full flex flex-row-reverse justify-between items-center px-[12px] mt-[20px]">
           <div>ترتیب ستون‌ها</div>
           <button onClick={() => setIsOpen(false)}>

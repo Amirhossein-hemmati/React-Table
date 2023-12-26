@@ -14,9 +14,9 @@ function Navbar({
   setCurrentPage,
   setSearchBox,
   setIsOpen,
-  setUpdateColumns,
   isOpen,
-  headers,updateColumns,columnOrder
+  headers,
+  handleToggle
 }) {
   const [changeInput, setChangeInput] = useState("")
 
@@ -83,9 +83,9 @@ function Navbar({
           <button onClick={() => setIsOpen(true)} className="w-[40px] h-[44px] border-[1px] rounded-md flex justify-center items-center mr-[12px]">
             <Bars3BottomLeftIcon className="w-5 h-5 text-gray-500" />
           </button>
-          {isOpen && <DragAndDropModal columnOrder={columnOrder} updateColumns={updateColumns} setIsOpen={setIsOpen} headers={headers} setUpdateColumns={setUpdateColumns}/>}
         </div>
       </div>
+      {isOpen && <DragAndDropModal setIsOpen={setIsOpen} headers={headers} handleToggle={handleToggle}/>}
     </div>
   );
 }
