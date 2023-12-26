@@ -12,7 +12,8 @@ function DragAndDropModal({
   headers,
   handleToggle
 }) {
-  const [test, setTest] = useState([]);
+  const [test, setTest] = useState(JSON.parse(localStorage.getItem('columnOrder') || []);
+  const [initialOrder, setInitialOrder] = useState([]);
 
   // prevent nullish of state
   useEffect(() => {
@@ -22,10 +23,14 @@ function DragAndDropModal({
         name: header,
         isActive: false,
       }));
-
       setTest(headersWithIds);
+      setInitialOrder([...headersWithIds]); // Save the initial order
     }
-  }, []);
+  }, [headers, test]);
+
+  useEffect(() => {
+    localStorage.setItem('test', JSON.stringify(test));
+  }, [test]);
 
   useEffect(() => {
     handleToggle(test)
@@ -77,7 +82,7 @@ function DragAndDropModal({
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <div className="text-purple-800">{item.name}</div>
+                          <div className="text-purple-800">{item.name || item}</div>
                           <div>
                             <ArrowsUpDownIcon className="w-4 h-4" />
                           </div>
@@ -99,7 +104,7 @@ function DragAndDropModal({
         </div>
         <div className="flex justify-end items-center mt-[20px]">
           <button className="w-[120px] h-[40px] rounded-md bg-purple-900 flex justify-around items-center mr-[16px]">
-            <div className="text-white">پیش فرض</div>
+            <div className="text-white" onClick={() => setTest([...initialOrder])}>پیش فرض</div>
             <div>
               <ArrowPathIcon className="w-5 h-5 text-white" />
             </div>

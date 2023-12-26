@@ -18,10 +18,6 @@ function MainPage() {
   // array of string column order
   const [columnOrder, setColumnOrder] = useState([]);
 
-  // useEffect(() => {
-  //   console.log(columnOrder)
-  // }, [columnOrder]);
-
   useEffect(() => {
     setIsLoading(true);
     axios
@@ -47,10 +43,8 @@ function MainPage() {
   const headers = Object.keys(data[0] ?? {});
 
   const handleToggleColumnAcitivity = (test) => {
-    setColumnOrder(test)
+     setColumnOrder(test)
   };
-  console.log(columnOrder)
-
 
   return (
     <div className="w-[95%] h-auto flex justify-around items-start flex-col">
@@ -69,7 +63,7 @@ function MainPage() {
         <table className="w-full mt-[20px]">
           <TableHead columnOrder={columnOrder} headers={headers}/>
           <tbody>
-            <TableBody searchBox={searchBox} data={data} setData={setData} columnOrder={columnOrder}/>
+            <TableBody headers={headers} searchBox={searchBox} data={data} setData={setData} columnOrder={columnOrder}/>
           </tbody>
         </table>
         <Tooltip id="my-tooltip" float={true} />
