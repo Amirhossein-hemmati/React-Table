@@ -1,5 +1,4 @@
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function TableBody({ searchBox, data, columnOrder, headers }) {
@@ -29,9 +28,9 @@ function TableBody({ searchBox, data, columnOrder, headers }) {
           item.title.slice(0, 30) + (item.title.length > 20 ? "..." : "");
         const truncatedBody =
           item.body.slice(0, 80) + (item.body.length > 50 ? "..." : "");
-          if (columnOrder.length === 0) {
-            columnOrder = headers;
-           }
+          // if (columnOrder.length === 0) {
+          //   columnOrder = headers;
+          //  }
         return (
           <tr
             className={`border-b-[1px] border-gray-200 cursor-pointer hover:bg-gray-300 transition duration-500 ease-in-out ${

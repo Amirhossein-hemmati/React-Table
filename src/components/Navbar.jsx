@@ -85,7 +85,7 @@ function Navbar({
           </button>
         </div>
       </div>
-      {isOpen && <DragAndDropModal setIsOpen={setIsOpen} headers={headers} handleToggle={handleToggle}/>}
+      {isOpen && headers.length > 0 && <DragAndDropModal setIsOpen={setIsOpen} headers={headers} handleToggle={handleToggle}/>}
     </div>
   );
 }

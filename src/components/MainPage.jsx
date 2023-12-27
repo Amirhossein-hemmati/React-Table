@@ -6,6 +6,7 @@ import TableRowSkeleton from "./TableRowSkeleton";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import Pagination from "./Pagination";
+import { json } from "react-router-dom";
 
 function MainPage() {
   const [data, setData] = useState([]); // all data
@@ -17,6 +18,7 @@ function MainPage() {
   const [isOpen, setIsOpen] = useState(false);
   // array of string column order
   const [columnOrder, setColumnOrder] = useState([]);
+  const [headers, setHeaders] = useState([]); // Initialize headers with an empty array
 
   useEffect(() => {
     setIsLoading(true);
@@ -34,16 +36,39 @@ function MainPage() {
       })
       .catch((error) => console.log(error))
       .finally(() => setIsLoading(false));
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize ]);
+
+  // useEffect(() => {
+  //   const headers = Object.keys(data[0] ?? {});
+
+  //   const currentOrder = JSON.parse(localStorage.getItem("test")) ?? headers;
+
+  //   setColumnOrder(currentOrder);
+  // }, []);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const newHeaders = Object.keys(data[0]);
+      setHeaders(newHeaders);
+      // Populate columnOrder with the keys from the first data object
+      setColumnOrder(newHeaders);
+    }
+   }, [data]);
+
+
+   useEffect(() => {
+    localStorage.setItem("columnOrder", JSON.stringify(columnOrder))
+}, [columnOrder]);
+
+
 
   if (isLoading && currentPage === 1) {
     return <TableRowSkeleton />;
   }
+  
 
-  const headers = Object.keys(data[0] ?? {});
-
-  const handleToggleColumnAcitivity = (test) => {
-     setColumnOrder(test)
+  const handleToggleColumnActivity = (test) => {
+    setColumnOrder(test);
   };
 
   return (
@@ -57,13 +82,19 @@ function MainPage() {
         setIsOpen={setIsOpen}
         isOpen={isOpen}
         headers={headers}
-        handleToggle={handleToggleColumnAcitivity}
+        handleToggle={handleToggleColumnActivity}
       />
       <div className="w-full h-auto rounded-[10px] flex justify-start items-center flex-col">
         <table className="w-full mt-[20px]">
-          <TableHead columnOrder={columnOrder} headers={headers}/>
+          <TableHead columnOrder={columnOrder} headers={headers} />
           <tbody>
-            <TableBody headers={headers} searchBox={searchBox} data={data} setData={setData} columnOrder={columnOrder}/>
+            <TableBody
+              headers={headers}
+              searchBox={searchBox}
+              data={data}
+              setData={setData}
+              columnOrder={columnOrder}
+            />
           </tbody>
         </table>
         <Tooltip id="my-tooltip" float={true} />

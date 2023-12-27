@@ -6,35 +6,34 @@ import {
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 function DragAndDropModal({
   setIsOpen,
   headers,
   handleToggle
 }) {
-  const [test, setTest] = useState(JSON.parse(localStorage.getItem('columnOrder') || []);
+  const [test, setTest] = useState([])
   const [initialOrder, setInitialOrder] = useState([]);
 
+  const headersWithIds = headers.map((header, index) => ({
+    id: String(index + 1),
+    name: header,
+    isActive: false,
+  }));
   // prevent nullish of state
   useEffect(() => {
     if (test.length === 0) {
-      const headersWithIds = headers.map((header, index) => ({
-        id: String(index + 1),
-        name: header,
-        isActive: false,
-      }));
-      setTest(headersWithIds);
+
+
+      // setTest(headersWithIds);
       setInitialOrder([...headersWithIds]); // Save the initial order
     }
+    handleToggle(test)
+
   }, [headers, test]);
 
-  useEffect(() => {
-    localStorage.setItem('test', JSON.stringify(test));
-  }, [test]);
 
-  useEffect(() => {
-    handleToggle(test)
-  }, [test]);
 
   const handleOnDragEnd = (result) => {
     const items = Array.from(test);
@@ -67,7 +66,7 @@ function DragAndDropModal({
                 ref={provided.innerRef}
                 className="columnName"
               >
-                {test.map((item, index) => {
+                {headersWithIds.map((item, index) => {
                   return (
                     <Draggable
                       key={item.id}
